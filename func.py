@@ -15,11 +15,4 @@ bitvavo = Bitvavo({
 def price_list(symbol: str):
     pair = str.upper(symbol) + '-EUR'
     resp = bitvavo.candles(pair, '1m', {})
-
-    new_price_list = []
-    for i in range(1, len(resp)):
-        new_price_list.append(resp[i][4])
-
-    return new_price_list
-
-
+    return [float(resp[x][4]) for x in range(1, len(resp))]
