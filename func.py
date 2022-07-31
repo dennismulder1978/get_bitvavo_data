@@ -14,16 +14,29 @@ bitvavo = Bitvavo({
 })
 
 
+def help():
+    return bitvavo.candles('BIT-EUR', '1m', {})
+
+
 def price_list(symbol: str):
     pair = str.upper(symbol) + '-EUR'
-    resp = bitvavo.candles(pair, '1h', {})
+    resp = bitvavo.candles(pair, '1m', {})
 
     new_price_list = []
-    print(f"Length list {pair}: {len(resp)}")
+    # print(f"Length list {pair}: {len(resp)}")
     for i in range(1, len(resp)):
-        new_price_list.append(float(resp[i][4]))
+        new_price_list.append(resp[i][4])
 
     return new_price_list
+
+
+def create_csv(*args):
+    index_row = []
+    for i in args:
+        for j in i:
+            index_row.append(j[0])
+    index_row_string = ','.join(index_row)
+    print(index_row_string)
 
 
 def log(stringer: str, name: str):
