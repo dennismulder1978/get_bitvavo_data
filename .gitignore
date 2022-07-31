@@ -1,6 +1,7 @@
 # created by virtualenv automatically
 
 Secret/
+*.csv
 
 
 # Byte-compiled / optimized / DLL files
