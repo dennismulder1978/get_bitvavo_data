@@ -17,7 +17,6 @@ def price_list(symbol: str):
     resp = bitvavo.candles(pair, '1m', {})
 
     new_price_list = []
-    # print(f"Length list {pair}: {len(resp)}")
     for i in range(1, len(resp)):
         new_price_list.append(resp[i][4])
 
