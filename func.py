@@ -45,7 +45,6 @@ def price_list(symbol: str):
         resp = bitvavo.candles(pair, '1h', {'end': period_list[i], 'limit': 673})
         if len(resp) == 673:
             for j in range(1, len(resp)):
- #               print(f'{i}-{j}: {resp[j][0]}')
                 pair_list.append(float(resp[j][4]))
         else:
             for j in range(1, 673):
