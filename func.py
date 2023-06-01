@@ -1,3 +1,7 @@
+from math import ceil
+
+import numpy as np
+import pandas as pd
 from Secret import const
 from python_bitvavo_api.bitvavo import Bitvavo
 from datetime import datetime
@@ -13,53 +17,65 @@ bitvavo = Bitvavo({
 })
 
 
-def period_punisher(interval_period: int):
-    # determine UNIX-time in milliseconds last whole hour
-    # Create list start and stop UNIX-times per 28 dag periods.
-
-    last_hour = datetime(
-        int(datetime.now().strftime('%Y')),  # current year
-        int(datetime.now().strftime('%m')),  # current month
-        int(datetime.now().strftime('%d')),  # current day
-        int(datetime.now().strftime('%H')),  # current hour
-        0,  # current hour, at 0 minutes, 0 seconds (start last hour)
-        0,  # current hour, at 0 minutes, 0 seconds (start last hour)
-    )
-
-    period_list = []
-    timer = int(last_hour.timestamp()*1000)  # epoch time last whole hour in milliseconds
-    for i in range(0, interval_period+1):  # 26 periods in 2 year time.
-        period_list.append(timer)
-        timer -= 2419200000  # 2.419.200.000 milliseconds per period (28 days)
-    return period_list
-
-
-def price_list(symbol: str):
+def price_list(symbol: str = 'ETH', period: str = '1d'):
     pair = str.upper(symbol) + '-EUR'   # determine pair
-    period_list = period_punisher(26)  # retrieving period_list per 28 days for 2 years
-    pair_list = []  # start with an empty list
-    for i in range(0, len(period_list)):
-        # Hourly price per pair in periods of 28 days.
-        # 24 hours per day, 28 days per period (4 weeks)= 672 hours per period
 
-        resp = bitvavo.candles(pair, '1h', {'end': period_list[i], 'limit': 673})
-        if len(resp) == 673:
-            for j in range(1, len(resp)):
-                pair_list.append(float(resp[j][4]))
-        else:
-            for j in range(1, 673):
-                pair_list.append(0)
+    # create a list of timestamp dates, between each is a 1000 candles
+    now_timestamp_in_milliseconds = ceil(datetime.now().timestamp() * 1000)
+    time_list = []
+    timer = 1
+    if period == '1d':
+        timer = 86400000000
+    if period == '12h':
+        timer = 43200000000
+    if period == '6h':
+        timer = 21600000000
+    if period == '1h':
+        timer = 3600000000
+    if period == '5m':
+        timer = 300000000
+    if period == '1m':
+        timer = 60000000
+    for i in range(0, ceil(133574400000 / timer)):  # 133... is 1546 days = approximately total amount of data available
+        x = now_timestamp_in_milliseconds - (i * timer)
+        time_list.append(x)
+    print(f'Length:{len(time_list)}')
 
-    pair_list.pop(671)  # because the first item of the first list is absent: the last is doubled. This corrects.
-    return pair_list
+    datetime_list = []
+    coin_values_list = []
+    for i in range(0, len(time_list)):
+        resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
+        for each in resp:
+            each[0] = int(each[0]/1000)
+            if i > 0:
+                if each[0] in datetime_list:
+                    print('datetime dubbel!!')
+                else:
+                    coin_values_list.append(each)
+            else:
+                coin_values_list.append(each)
+            datetime_list.append(each[0])
+        print(i)
+    return coin_values_list
 
 
-def ma(input_list, length):
-    short_list = input_list[:length:]  # shorten list to requested length
-    print(short_list)
-    try:
-        result = sum(short_list)/len(short_list)
-    except Exception as e:
-        print(e)
-        result = 0
-    return result
+def show_time(time_list: list):
+    new_list = []
+    for each in time_list:
+        new_list.append(datetime.fromtimestamp(each[0]).strftime("%d-%b-%Y %H:%M:%S"))
+
+    print(f'Time list contains: {len(new_list)} items')
+    print(new_list[-1:])
+    print(new_list[-2:-1])
+    for i in range(2):
+        print('.')
+    print(new_list[1:2])
+    print(new_list[:1])
+    print('---*****-**----***------*****---****-------***---**----***-----')
+    return 'Success'
+
+
+def save_to_file(list_data: list, column_list: list, file_name: str = 'file'):
+    df = pd.DataFrame(list_data)
+    name_of_file = file_name + f'__created_{datetime.now().strftime("%d-%b-%Y")}.csv'
+    df.to_csv(name_of_file, index=False, header=column_list)
