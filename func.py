@@ -1,7 +1,7 @@
-import numpy as np
 from Secret import const
 from python_bitvavo_api.bitvavo import Bitvavo
 from datetime import datetime
+
 
 bitvavo = Bitvavo({
     'APIKEY': const.api_key,
@@ -13,7 +13,7 @@ bitvavo = Bitvavo({
 })
 
 
-def period_punisher():
+def period_punisher(interval_period: int):
     # determine UNIX-time in milliseconds last whole hour
     # Create list start and stop UNIX-times per 28 dag periods.
 
@@ -28,7 +28,7 @@ def period_punisher():
 
     period_list = []
     timer = int(last_hour.timestamp()*1000)  # epoch time last whole hour in milliseconds
-    for i in range(0, 27):  # 26 periods in 2 year time.
+    for i in range(0, interval_period+1):  # 26 periods in 2 year time.
         period_list.append(timer)
         timer -= 2419200000  # 2.419.200.000 milliseconds per period (28 days)
     return period_list
@@ -36,7 +36,7 @@ def period_punisher():
 
 def price_list(symbol: str):
     pair = str.upper(symbol) + '-EUR'   # determine pair
-    period_list = period_punisher()  # retrieving period_list per 28 days for 2 years
+    period_list = period_punisher(26)  # retrieving period_list per 28 days for 2 years
     pair_list = []  # start with an empty list
     for i in range(0, len(period_list)):
         # Hourly price per pair in periods of 28 days.
@@ -50,7 +50,16 @@ def price_list(symbol: str):
             for j in range(1, 673):
                 pair_list.append(0)
 
-    #         time_list.append(datetime.fromtimestamp(int(resp[j][0] / 1000)))
-    # time_list.pop(671)  # because the first item of the first list is absent: the last is doubled. This corrects.
     pair_list.pop(671)  # because the first item of the first list is absent: the last is doubled. This corrects.
     return pair_list
+
+
+def ma(input_list, length):
+    short_list = input_list[:length:]  # shorten list to requested length
+    print(short_list)
+    try:
+        result = sum(short_list)/len(short_list)
+    except Exception as e:
+        print(e)
+        result = 0
+    return result
