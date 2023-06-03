@@ -1,6 +1,6 @@
 from func import *
 
-period = '5m'
+period = '1h'
 coin = 'ETH'
 
 price_list = price_list(symbol=coin, period=period)
