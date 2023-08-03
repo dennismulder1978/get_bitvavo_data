@@ -45,7 +45,7 @@ def price_list(symbol: str = 'ETH', period: str = '1d'):
     for i in range(0, len(time_list)):
         resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
         for each in resp:
-            each[0] = int(each[0]/1000)
+            each[0] = int(int(each[0])/1000)
             if i > 0:
                 if each[0] in datetime_list:
                     print('datetime dubbel!!')
