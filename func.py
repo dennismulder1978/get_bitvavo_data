@@ -7,8 +7,8 @@ from math import ceil
 
 
 bitvavo = Bitvavo({
-    'APIKEY': const.api_key,
-    'APISECRET': const.api_secret,
+    'APIKEY': const.api_key1,
+    'APISECRET': const.api_secret1,
     'RESTURL': 'https://api.bitvavo.com/v2',
     'WSURL': 'wss://ws.bitvavo.com/v2/',
     'ACCESSWINDOW': 10000,
