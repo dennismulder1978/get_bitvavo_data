@@ -1,6 +1,6 @@
 from func import *
 
-coins_list = ['ETH']
+coins_list = ['LUNA2']
 periods_list = ['5m', '1h', '2h', '3h', '6h', '12h', '1d', '2d']
 
 for coin in coins_list:
