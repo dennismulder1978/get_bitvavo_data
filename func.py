@@ -1,5 +1,4 @@
 from Secret import const
-import numpy as np
 import pandas as pd
 from python_bitvavo_api.bitvavo import Bitvavo
 from datetime import datetime
@@ -16,9 +15,7 @@ bitvavo = Bitvavo({
 })
 
 
-def price_list(symbol: str = 'ETH', period: str = '1d'):
-    pair = str.upper(symbol) + '-EUR'   # determine pair
-
+def cohort_creator(period: str= '1d'):
     # create a list of timestamp dates, between each is a 1000 candles
     now_timestamp_in_milliseconds = ceil(datetime.now().timestamp() * 1000)
     time_list = []
@@ -38,42 +35,35 @@ def price_list(symbol: str = 'ETH', period: str = '1d'):
     for i in range(0, ceil(133574400000 / timer)):  # 133... is 1546 days = approximately total amount of data available
         x = now_timestamp_in_milliseconds - (i * timer)
         time_list.append(x)
-    print(f'Length:{len(time_list)}')
+    print(f'Number of candle cohorts:{len(time_list)}')
+    return time_list
 
+def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
+    pair = str.upper(symbol) + '-EUR'   # determine pair
+
+    time_list = cohort_creator(period=period)
     datetime_list = []
     coin_values_list = []
-    for i in range(0, len(time_list)):
-        resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
-        print(resp)
-        for each in resp:
-            each[0] = int(each[0]/1000)
-            if i > 0:
-                if each[0] in datetime_list:
-                    print('datetime dubbel!!')
+
+    try:
+        for i in range(0, len(time_list)):
+            resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
+            print(resp)
+            for each in resp:
+                each[0] = int(each[0]/1000)
+                if i > 0:
+                    if each[0] in datetime_list:
+                        print('datetime dubbel!!')
+                    else:
+                        coin_values_list.append(each)
                 else:
                     coin_values_list.append(each)
-            else:
-                coin_values_list.append(each)
-            datetime_list.append(each[0])
-        print(i)
-    return coin_values_list
-
-
-def show_time(time_list: list):
-    new_list = []
-    for each in time_list:
-        new_list.append(datetime.fromtimestamp(each[0]).strftime("%d-%b-%Y %H:%M:%S"))
-
-    print(f'Time list contains: {len(new_list)} items')
-    print(new_list[-1:])
-    print(new_list[-2:-1])
-    for i in range(2):
-        print('.')
-    print(new_list[1:2])
-    print(new_list[:1])
-    print('---*****-**----***------*****---****-------***---**----***-----')
-
-    return 'Success'
+                datetime_list.append(each[0])
+            print(i)
+    except Exception as e:
+        print(e)
+        go = False
+    return go, coin_values_list
 
 
 def save_to_file(list_data: list, column_list: list, file_name: str = 'file'):
