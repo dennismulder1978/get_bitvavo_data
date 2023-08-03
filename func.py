@@ -7,8 +7,8 @@ from math import ceil
 
 
 bitvavo = Bitvavo({
-    'APIKEY': const.api_key1,
-    'APISECRET': const.api_secret1,
+    'APIKEY': const.api_key_info,
+    'APISECRET': const.api_secret_info,
     'RESTURL': 'https://api.bitvavo.com/v2',
     'WSURL': 'wss://ws.bitvavo.com/v2/',
     'ACCESSWINDOW': 10000,
@@ -72,6 +72,7 @@ def show_time(time_list: list):
     print(new_list[1:2])
     print(new_list[:1])
     print('---*****-**----***------*****---****-------***---**----***-----')
+
     return 'Success'
 
 
@@ -80,4 +81,5 @@ def save_to_file(list_data: list, column_list: list, file_name: str = 'file'):
     path = './results/'
     name_of_file = path + file_name + f'__created_{datetime.now().strftime("%d-%b-%Y")}.csv'
     df.to_csv(name_of_file, index=False, header=column_list)
+
     return name_of_file + ' saved.'
