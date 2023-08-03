@@ -78,3 +78,4 @@ def save_to_file(list_data: list, column_list: list, file_name: str = 'file'):
     df = pd.DataFrame(list_data)
     name_of_file = file_name + f'__created_{datetime.now().strftime("%d-%b-%Y")}.csv'
     df.to_csv(name_of_file, index=False, header=column_list)
+    return name_of_file + ' saved.'
