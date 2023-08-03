@@ -1,10 +1,9 @@
-from math import ceil
-
+from Secret import const
 import numpy as np
 import pandas as pd
-from Secret import const
 from python_bitvavo_api.bitvavo import Bitvavo
 from datetime import datetime
+from math import ceil
 
 
 bitvavo = Bitvavo({
