@@ -7,8 +7,8 @@ from math import ceil
 
 
 bitvavo = Bitvavo({
-    'APIKEY': const.api_key,
-    'APISECRET': const.api_secret,
+    'APIKEY': const.api_key1,
+    'APISECRET': const.api_secret1,
     'RESTURL': 'https://api.bitvavo.com/v2',
     'WSURL': 'wss://ws.bitvavo.com/v2/',
     'ACCESSWINDOW': 10000,
@@ -44,8 +44,9 @@ def price_list(symbol: str = 'ETH', period: str = '1d'):
     coin_values_list = []
     for i in range(0, len(time_list)):
         resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
+        print(resp)
         for each in resp:
-            each[0] = int(int(each[0])/1000)
+            each[0] = int(each[0]/1000)
             if i > 0:
                 if each[0] in datetime_list:
                     print('datetime dubbel!!')
@@ -76,6 +77,7 @@ def show_time(time_list: list):
 
 def save_to_file(list_data: list, column_list: list, file_name: str = 'file'):
     df = pd.DataFrame(list_data)
-    name_of_file = file_name + f'__created_{datetime.now().strftime("%d-%b-%Y")}.csv'
+    path = './results/'
+    name_of_file = path + file_name + f'__created_{datetime.now().strftime("%d-%b-%Y")}.csv'
     df.to_csv(name_of_file, index=False, header=column_list)
     return name_of_file + ' saved.'
