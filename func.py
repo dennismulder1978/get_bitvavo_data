@@ -26,12 +26,17 @@ def cohort_creator(period: str= '1d'):
         timer = 43200000000
     if period == '6h':
         timer = 21600000000
+    if period == '3h':
+        timer = 10800000000
+    if period == '2h':
+        timer = 7200000000
     if period == '1h':
         timer = 3600000000
     if period == '5m':
         timer = 300000000
     if period == '1m':
         timer = 60000000
+
     for i in range(0, ceil(133574400000 / timer)):  # 133... is 1546 days = approximately total amount of data available
         x = now_timestamp_in_milliseconds - (i * timer)
         time_list.append(x)
