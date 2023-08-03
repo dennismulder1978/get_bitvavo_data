@@ -1,7 +1,7 @@
 from func import *
 
-coins_list = ['ETH']#['LUNA2']
-periods_list = ['1d']#['5m', '1h', '2h', '3h', '6h', '12h', '1d', '2d']
+coins_list = ['LUNA2']
+periods_list = ['5m', '1h', '2h', '3h', '6h', '12h', '1d', '2d']
 column_list = ['Date', 'Open', 'High', 'Low', 'Close', 'Vol.']
 
 for coin in coins_list:
