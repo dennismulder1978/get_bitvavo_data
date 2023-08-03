@@ -16,7 +16,7 @@ bitvavo = Bitvavo({
 
 
 def cohort_creator(period: str= '1d'):
-    # create a list of timestamp dates, between each is a 1000 candles
+    # create a list of timestamp dates, between each is 1000 candles
     now_timestamp_in_milliseconds = ceil(datetime.now().timestamp() * 1000)
     time_list = []
     timer = 1
