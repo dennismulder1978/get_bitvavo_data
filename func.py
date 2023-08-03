@@ -38,6 +38,7 @@ def cohort_creator(period: str= '1d'):
     print(f'    Number of candle cohorts: {len(time_list)}..')
     return time_list
 
+
 def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
     pair = str.upper(symbol) + '-EUR'   # determine pair
 
