@@ -44,7 +44,7 @@ def cohort_creator(period: str= '1d'):
     return time_list
 
 
-def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
+def price_list(coin_values_list: list, symbol: str = 'ETH', period: str = '1d', go: bool=True):
     pair = str.upper(symbol) + '-EUR'   # determine pair
 
     time_list = cohort_creator(period=period)
