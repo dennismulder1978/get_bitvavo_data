@@ -44,14 +44,14 @@ def cohort_creator(period: str= '1d'):
     return time_list
 
 
-def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
+def price_list(symbol: str = 'ETH', period: str = '1d', go: bool = True):
     pair = str.upper(symbol) + '-EUR'   # determine pair
     time_list = cohort_creator(period=period)
     datetime_list = []
     coin_values_list = []
 
     print('    Start trying to get prices...', end="")
-    for i in range(0, len(time_list)-1):
+    for i in range(0, len(time_list)):
         print(f' {i + 1}', end="")
         try:
             resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
@@ -59,7 +59,6 @@ def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
             print(e)
             go = False
             return go, coin_values_list
-            break
         for each in resp:
             each[0] = int(each[0]/1000)
             if i > 0:
