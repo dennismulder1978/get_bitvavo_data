@@ -50,7 +50,6 @@ def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
     datetime_list = []
     coin_values_list = []
 
-
     print('    Start trying to get prices...', end="")
     for i in range(0, len(time_list)-1):
         print(f' {i + 1}', end="")
@@ -62,8 +61,7 @@ def price_list(symbol: str = 'ETH', period: str = '1d', go: bool=True):
             return go, coin_values_list
             break
         for each in resp:
-            print(each)
-            #each[0] = int(each[0]/1000)
+            each[0] = int(each[0]/1000)
             if i > 0:
                 if each[0] not in datetime_list:
                     coin_values_list.append(each)
