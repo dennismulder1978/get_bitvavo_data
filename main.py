@@ -9,10 +9,11 @@ for coin in coins_list:
     for period in periods_list:
         print(f'{coin}..{period}:')
         coin_values_list = []
-        go_signal, coin_values_list = price_list(coin_values_list=coin_values_list,
-                                                 symbol=coin,
+        go_signal, coin_values_list = price_list(symbol=coin,
                                                  period=period,
                                                  go=True)
+        print(f'Go?: {go_signal}')
+        print(f'Coin value list: {coin_values_list}')
         if go_signal:
             filename = f'{coin}_trade_data__per_{period}__{len(coin_values_list)}_items'
             save_to_file(list_data=coin_values_list,
