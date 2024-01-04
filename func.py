@@ -29,6 +29,10 @@ def price_list(symbol: str = 'ETH', period: str = '1d'):
         timer = 43200000000
     if period == '6h':
         timer = 21600000000
+    if period == '3h':
+        timer = 10800000000
+    if period == '2h':
+        timer = 7200000000
     if period == '1h':
         timer = 3600000000
     if period == '5m':
@@ -44,14 +48,14 @@ def price_list(symbol: str = 'ETH', period: str = '1d'):
     coin_values_list = []
     for i in range(0, len(time_list)):
         resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
-        print(resp)
         for each in resp:
             each[0] = int(each[0]/1000)
             if i > 0:
-                if each[0] in datetime_list:
-                    print('datetime dubbel!!')
-                else:
+                if each[0] not in datetime_list:
                     coin_values_list.append(each)
+                else:
+                    # print('datetime dubbel!!')
+                    pass
             else:
                 coin_values_list.append(each)
             datetime_list.append(each[0])
