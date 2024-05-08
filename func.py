@@ -44,11 +44,12 @@ def cohort_creator(period: str= '1d'):
     return time_list
 
 
-def price_list(symbol: str = 'ETH', period: str = '1d', go: bool = True):
+def price_list(symbol: str = 'ETH', period: str = '1d'):
     pair = str.upper(symbol) + '-EUR'   # determine pair
     time_list = cohort_creator(period=period)
     datetime_list = []
     coin_values_list = []
+
 
     print('    Start trying to get prices...', end="")
     for i in range(0, len(time_list)):
@@ -67,9 +68,8 @@ def price_list(symbol: str = 'ETH', period: str = '1d', go: bool = True):
             else:
                 coin_values_list.append(each)
             datetime_list.append(each[0])
-
     print('....Done..')
-    return go, coin_values_list
+    return coin_values_list
 
 
 def save_to_file(list_data: list, column_list: list, file_name: str = 'file'):
