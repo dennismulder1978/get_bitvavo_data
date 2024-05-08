@@ -5,6 +5,9 @@ periods_list = ['1h']   # ['5m', '1h', '2h', '6h', '12h', '1d']
 column_list = ['Date', 'Open', 'High', 'Low', 'Close', 'Vol.']
 go_signal = False
 
+print(bitvavo.account())
+
+
 for coin in coins_list:
     for period in periods_list:
         print(f'{coin}..{period}:')
