@@ -22,22 +22,22 @@ def cohort_creator(period: str= '1d'):
     timer = 1
     if period == '1d':
         timer = 86400000000
-    if period == '12h':
+    elif period == '12h':
         timer = 43200000000
-    if period == '6h':
+    elif period == '6h':
         timer = 21600000000
-    if period == '3h':
+    elif period == '3h':
         timer = 10800000000
-    if period == '2h':
+    elif period == '2h':
         timer = 7200000000
-    if period == '1h':
+    elif period == '1h':
         timer = 3600000000
-    if period == '5m':
+    elif period == '5m':
         timer = 300000000
-    if period == '1m':
+    elif period == '1m':
         timer = 60000000
 
-    for i in range(0, ceil(133574400000 / timer)):  # 133... is 1546 days = approximately total amount of data available
+    for i in range(ceil(133574400000 / timer)):  # 133... is 1546 days = approximately total amount of data available
         x = now_timestamp_in_milliseconds - (i * timer)
         time_list.append(x)
     print(f'    Number of candle cohorts: {len(time_list)}..')
@@ -52,7 +52,7 @@ def price_list(symbol: str = 'ETH', period: str = '1d'):
 
 
     print('    Start trying to get prices...', end="")
-    for i in range(0, len(time_list)):
+    for i in range(len(time_list)):
         print(f' {i + 1}', end="")
         try:
             resp = bitvavo.candles(pair, period, {'limit': 1000, 'end': time_list[i]})
