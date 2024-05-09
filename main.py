@@ -1,6 +1,6 @@
 from func import *
 
-coins_list = ['LUNA2']
+coins_list = ['doge']
 periods_list = ['5m']   # ['5m', '1h', '2h', '6h', '12h', '1d']
 column_list = ['Date', 'Open', 'High', 'Low', 'Close', 'Vol.']
 go_signal = True
