@@ -45,34 +45,54 @@ def coin_test(df: pd.DataFrame, sell_perc:int=-1, buy_perc:int=1):
         euro = df.iloc[-1, 0] * coin
     
     return euro
-    
-end_result = []
-index_future = []
-index_buy_prec = []
-index_sell_prec = []
 
-for i in range(12,121,6):
-    index_future.append(i)
-    print(f"|{i}|", end="")
-    luna2_dataframe = create_df(shift=i)
-    # luna2_dataframe = luna2_dataframe[:100]
-    result_j = []
-    for jj in range(2,22,1):
-        print(".", end="")
-        j = jj/2
-        index_buy_prec.append(j)
-        result_k = []
-        for kk in range(-2,-22,-1):
-            k = kk/2
-            index_sell_prec.append(k)
-            result_k.append(coin_test(df=luna2_dataframe, sell_perc=k, buy_perc=j))
-        result_j.append(result_k)
-    end_result.append(result_j)
 
-print("\n--------------------------")
-end_result_array = np.array(end_result)
+def initiate_coin_test():    
+    end_result = []
+    index_future = []
+    index_buy_prec = []
+    index_sell_prec = []
+    result_i = []
+    for i in range(12,121,6):
+        index_future.append(i)
+        print(f"|{i}|", end="")
+        # create appropriate DataFrame
+        luna2_dataframe = create_df(shift=i)
+        # luna2_dataframe = luna2_dataframe[:100]
+        
+        # per DataFrame, loop through all buyprecentages
+        result_j = []
+        for jj in range(2,22,1):
+            print(".", end="")
+            j = jj/2
+            index_buy_prec.append(j)
+            result_k = []
+            # per buy_precentage loop through all sell percentages
+            for kk in range(-2,-22,-1):
+                k = kk/2
+                index_sell_prec.append(k)
+                result_k.append(coin_test(df=luna2_dataframe, sell_perc=k, buy_perc=j))
+            
+            result_j.append(result_k)
+            result_k = []
+        
+        result_i.append(result_j)
+        result_j = []
+        
+    end_result.append(result_i)
 
-np.save('end_result_array', end_result_array)
+    print("\n--------------------------")
+    end_result_array = np.array(end_result)
 
-max = np.unravel_index(end_result_array.argmax(), end_result_array.shape)
-print(f'Max result: Euro:{end_result_array.max():.2f}, cohort: {index_future[max[0]]}, buy percentage: {index_buy_prec[max[1]]}, sell percentage: {index_sell_prec[max[2]]}')
+    np.save('end_result_array', end_result_array)
+
+    max = np.unravel_index(end_result_array.argmax(), end_result_array.shape)
+    print(f'Max result: Euro:{end_result_array.max():.2f}, cohort: {index_future[max[0]]}, buy percentage: {index_buy_prec[max[1]]}, sell percentage: {index_sell_prec[max[2]]}')
+
+def show_3d_result():
+    res = np.load('end_result_array.npy')
+    return res
+
+res = show_3d_result()
+print(res)
+print(res.shape)
