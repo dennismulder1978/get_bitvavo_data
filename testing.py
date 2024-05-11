@@ -1,7 +1,7 @@
 import pandas as pd 
 import numpy as np 
 import matplotlib.pyplot as plt
-
+from datetime import datetime as dt
 
 def create_df(shift:int=2):
     """
@@ -53,22 +53,24 @@ def initiate_coin_test():
     index_buy_prec = []
     index_sell_prec = []
     result_i = []
-    for i in range(12,121,6):
+    for i in range(1, 12, 1):
         index_future.append(i)
         print(f"|{i}|", end="")
         # create appropriate DataFrame
         luna2_dataframe = create_df(shift=i)
+        
+        # Testing with a smaller database. 
         # luna2_dataframe = luna2_dataframe[:100]
         
-        # per DataFrame, loop through all buyprecentages
+        # per DataFrame, loop through all buy percentages
         result_j = []
-        for jj in range(2,22,1):
+        for jj in range(2, 5, 1):
             print(".", end="")
             j = jj/2
             index_buy_prec.append(j)
             result_k = []
-            # per buy_precentage loop through all sell percentages
-            for kk in range(-2,-22,-1):
+            # per buy percentage loop through all sell percentages
+            for kk in range(-2,-5,-1):
                 k = kk/2
                 index_sell_prec.append(k)
                 result_k.append(coin_test(df=luna2_dataframe, sell_perc=k, buy_perc=j))
@@ -82,17 +84,28 @@ def initiate_coin_test():
     end_result.append(result_i)
 
     print("\n--------------------------")
-    end_result_array = np.array(end_result)
+    end_result_array = np.array(result_i)
 
-    np.save('end_result_array', end_result_array)
+    save_name = 'end_result_array__' + dt.strftime(dt.now(), "%H_%M_%d_%m_%y")
+    np.save(save_name, end_result_array)
 
     max = np.unravel_index(end_result_array.argmax(), end_result_array.shape)
     print(f'Max result: Euro:{end_result_array.max():.2f}, cohort: {index_future[max[0]]}, buy percentage: {index_buy_prec[max[1]]}, sell percentage: {index_sell_prec[max[2]]}')
+    
+    return end_result_array
+
 
 def show_3d_result():
-    res = np.load('end_result_array.npy')
+    res = np.load('end_result_array_1.npy')
+    indexes = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5]
+    cohort_index = [6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120]
+    
+    max = np.unravel_index(res.argmax(), res.shape)
+    print(f'Max result: Euro:{res.max():.2f}, cohort: {cohort_index[max[0]]}, buy percentage: {indexes[max[1]]}, sell percentage: {indexes[max[2]]}')
+    
+    
     return res
 
-res = show_3d_result()
-print(res)
-print(res.shape)
+
+era = initiate_coin_test()
+print(f'ERA (initial): {era.shape}')
