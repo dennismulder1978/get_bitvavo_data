@@ -64,13 +64,13 @@ def initiate_coin_test():
         
         # per DataFrame, loop through all buy percentages
         result_j = []
-        for jj in range(2, 5, 1):
+        for jj in range(2, 7, 1):
             print(".", end="")
             j = jj/2
             index_buy_prec.append(j)
             result_k = []
             # per buy percentage loop through all sell percentages
-            for kk in range(-2,-5,-1):
+            for kk in range(-2,-7,-1):
                 k = kk/2
                 index_sell_prec.append(k)
                 result_k.append(coin_test(df=luna2_dataframe, sell_perc=k, buy_perc=j))
